@@ -81,14 +81,20 @@ client.on("message", message => {
 const botUptimes = new Discord.Collection();
 
 client.on("presenceUpdate", (oldMember, newMember) => {
-    const monitoredBots = require("./monitoredBots.json");
+    //const monitoredBots = require("./monitoredBots.json");
+    const settings = JSON.parse(fs.readFileSync("settings.json", "utf8"));
 
     const id = oldMember.id;
     
-    if (monitoredBots.hasOwnProperty(id)) {
+    if (settings.monitoredBots.hasOwnProperty(id)) {
         let botChannel = newMember.guild.defaultChannel;
-        if (config.defaultChannels.hasOwnProperty(newMember.guild.id)) {
-            botChannel = client.channels.get(config.defaultChannels[newMember.guild.id]);
+        if (settings.defaultChannels.hasOwnProperty(newMember.guild.id)) {
+            botChannel = client.channels.get(settings.defaultChannels[newMember.guild.id]);
+        }
+
+        if (!botChannel) {
+            console.error("couldn't find default channel");
+            return;
         }
 
         const now = Date.now();
@@ -107,7 +113,7 @@ client.on("presenceUpdate", (oldMember, newMember) => {
 
             botUptimes.set(id, now);
         } else if (oldMember.presence.status !== "offline" && newMember.presence.status === "offline") {
-            let msg = `OnO, ${newMember.displayName} is gone <@${monitoredBots[id].ownerId}>.`;
+            let msg = `OnO, ${newMember.displayName} is gone <@${settings.monitoredBots[id].ownerId}>.`;
             if (duration) {
                 msg += ` Uptime was ${duration}.`;
             }
