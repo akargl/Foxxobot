@@ -1,10 +1,10 @@
 const config = require("./config");
-const Discord = require("discord.js");
+const { Client, Collection } = require("discord.js");
 const fs = require("fs");
 const prettyMilliseconds = require("pretty-ms");
-const client = new Discord.Client();
+const client = new Client();
 
-client.commands = new Discord.Collection();
+client.commands = new Collection();
 fs.readdirSync("./commands")
     .filter(f => f.endsWith(".js"))
     .forEach((f) => {
@@ -12,7 +12,7 @@ fs.readdirSync("./commands")
         client.commands.set(command.name, command);
     });
 
-const cooldowns = new Discord.Collection();
+const cooldowns = new Collection();
 
 client.on("error", console.error);
 
@@ -52,7 +52,7 @@ client.on("message", message => {
     }
 
     if (!cooldowns.has(command.name)) {
-        cooldowns.set(command.name, new Discord.Collection());
+        cooldowns.set(command.name, new Collection());
     }
 
     const now = Date.now();
@@ -80,7 +80,7 @@ client.on("message", message => {
 });
 
 
-const botUptimes = new Discord.Collection();
+const botUptimes = new Collection();
 
 client.on("presenceUpdate", (oldMember, newMember) => {
     //const monitoredBots = require("./monitoredBots.json");
