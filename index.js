@@ -115,7 +115,10 @@ client.on("presenceUpdate", (oldMember, newMember) => {
 
             botUptimes.set(id, now);
         } else if (oldMember.presence.status !== "offline" && newMember.presence.status === "offline") {
-            let msg = `OnO, ${newMember.displayName} is gone <@${settings.monitoredBots[id].ownerId}>.`;
+            let msg = `OnO, ${newMember.displayName} is gone`;
+            if (settings.monitoredBots[id].pingOwner) {
+                msg += ` <@${settings.monitoredBots[id].ownerId}>.`;
+            }
             if (duration) {
                 msg += ` Uptime was ${duration}.`;
             }

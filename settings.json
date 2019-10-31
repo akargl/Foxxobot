@@ -2,7 +2,8 @@
     "monitoredBots": {
         "570367627164254228": {
             "name": "Sneaky",
-            "ownerId": "114800774927745028"
+            "ownerId": "114800774927745028",
+            "pingOwner": false
         }
     },
 
