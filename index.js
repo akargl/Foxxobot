@@ -14,6 +14,8 @@ fs.readdirSync("./commands")
 
 const cooldowns = new Discord.Collection();
 
+client.on("error", console.error);
+
 
 client.once("ready", () => {
     console.log("Ready to rock!");
