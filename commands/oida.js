@@ -31,6 +31,10 @@ module.exports = {
 	},
 	oidaCount: {},
 	onLoad() {
-		this.oidaCount = JSON.parse(fs.readFileSync("oidacount.json", "utf8")) || {};
+		try {
+			this.oidaCount = JSON.parse(fs.readFileSync("oidacount.json", "utf8")) || {};
+		} catch (error) {
+			console.warn("Couldn't open oidacount.json");
+		}
 	},
 };
