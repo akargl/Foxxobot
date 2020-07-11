@@ -5,11 +5,15 @@ const prettyMilliseconds = require("pretty-ms");
 const client = new Client();
 
 client.commands = new Collection();
+client.commandAliases = new Collection();
 fs.readdirSync("./commands")
     .filter(f => f.endsWith(".js"))
     .forEach((f) => {
         const command = require(`./commands/${f}`);
         client.commands.set(command.name, command);
+        if (command.aliases) {
+            command.aliases.forEach((alias) => client.commandAliases.set(alias, command.name));
+        }
     });
 
 const cooldowns = new Collection();
@@ -29,7 +33,8 @@ client.on("message", message => {
     }
 
     const args = message.content.slice(config.PREFIX.length).split(/ +/);
-    const commandName = args.shift().toLowerCase();
+    let commandName = args.shift().toLowerCase();
+    commandName = client.commandAliases.get(commandName) || commandName;
 
     if (!client.commands.has(commandName)) {
         return;
@@ -83,7 +88,6 @@ client.on("message", message => {
 const botUptimes = new Collection();
 
 client.on("presenceUpdate", (oldMember, newMember) => {
-    //const monitoredBots = require("./monitoredBots.json");
     const settings = JSON.parse(fs.readFileSync("settings.json", "utf8"));
 
     const id = oldMember.id;
