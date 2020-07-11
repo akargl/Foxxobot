@@ -14,6 +14,10 @@ fs.readdirSync("./commands")
         if (command.aliases) {
             command.aliases.forEach((alias) => client.commandAliases.set(alias, command.name));
         }
+
+        if (command.onLoad) {
+            command.onLoad();
+        }
     });
 
 const cooldowns = new Collection();
@@ -88,6 +92,9 @@ client.on("message", message => {
 const botUptimes = new Collection();
 
 client.on("presenceUpdate", (oldMember, newMember) => {
+    if (!oldMember) {
+        return;
+    }
     const settings = JSON.parse(fs.readFileSync("settings.json", "utf8"));
 
     const id = oldMember.id;
