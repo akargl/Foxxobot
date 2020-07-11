@@ -2,5 +2,5 @@ require("dotenv").config({silent: true});
 
 module.exports = {
     DISCORD_TOKEN: process.env.DISCORD_TOKEN,
-    PREFIX: "?",
+    PREFIX: process.env.PREFIX || "!",
 }
