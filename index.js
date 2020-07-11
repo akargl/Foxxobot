@@ -26,7 +26,7 @@ client.on("error", console.error);
 
 
 client.once("ready", () => {
-    console.log("Ready to rock!");
+	console.log("Ready to rock!");
 });
 
 client.login(config.DISCORD_TOKEN);
