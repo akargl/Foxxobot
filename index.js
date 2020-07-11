@@ -66,7 +66,7 @@ client.on("message", message => {
 
 	const now = Date.now();
 	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 3) *1000;
+	const cooldownAmount = (command.cooldown || 3) * 1000;
 
 	if (!timestamps.has(message.author.id)) {
 		timestamps.set(message.author.id, now);
@@ -98,7 +98,7 @@ client.on("presenceUpdate", (oldMember, newMember) => {
 	const settings = JSON.parse(fs.readFileSync("settings.json", "utf8"));
 
 	const id = oldMember.id;
-    
+
 	if (settings.monitoredBots.hasOwnProperty(id)) {
 		let botChannel = newMember.guild.defaultChannel;
 		if (settings.defaultChannels.hasOwnProperty(newMember.guild.id)) {
@@ -114,7 +114,7 @@ client.on("presenceUpdate", (oldMember, newMember) => {
 		const lastStateChange = botUptimes.get(id);
 		let duration;
 		if (lastStateChange) {
-			duration = prettyMilliseconds(now - lastStateChange, {compact: true});
+			duration = prettyMilliseconds(now - lastStateChange, { compact: true });
 		}
 
 		if (oldMember.presence.status === "offline" && newMember.presence.status !== "offline") {

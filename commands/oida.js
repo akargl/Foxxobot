@@ -21,7 +21,7 @@ module.exports = {
 		}
 
 		if (!this.oidaCount.hasOwnProperty(lookupKey)) {
-			this.oidaCount[lookupKey]= { oidaCount: 0 };
+			this.oidaCount[lookupKey] = { oidaCount: 0 };
 		}
 		this.oidaCount[lookupKey].oidaCount++;
 
@@ -32,5 +32,5 @@ module.exports = {
 	oidaCount: {},
 	onLoad() {
 		this.oidaCount = JSON.parse(fs.readFileSync("oidacount.json", "utf8")) || {};
-	}
-}
+	},
+};
