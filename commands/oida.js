@@ -17,7 +17,8 @@ module.exports = {
 			lookupKey = mentionedUser.id;
 			username = mentionedUser.username;
 		} else {
-			username = lookupKey = args.join(" ").toLowerCase();
+			username = args.join(" ");
+			lookupKey = username.toLowerCase();
 		}
 
 		if (!this.oidaCount.hasOwnProperty(lookupKey)) {
