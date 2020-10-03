@@ -47,10 +47,17 @@ module.exports = {
 				oidaLeaderboard.forEach((x) => {
 					x.name = x.name.padEnd(padTo);
 				});
-
-				const leaderboardString = ["**Oida Leaderboard**", "```", ...(oidaLeaderboard
-					.map((x) => `${x.name}: ${x.count}`)), "```"]
-					.join("\n");
+				
+				let leaderboardString = "**Oida Leaderboard**\n```\n";
+				for (const x of oidaLeaderboard) {
+					const row = `${x.name}: ${x.count}\n`;
+					//max message length in Discord is 2000 chars so we have to constrain to that
+					if (leaderboardString.length + row.length > (2000 -3)) {
+						break;
+					}
+					leaderboardString += row;
+				}
+				leaderboardString += "```";
 
 				return message.channel.send(leaderboardString);
 			});
