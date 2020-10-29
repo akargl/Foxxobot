@@ -16,7 +16,7 @@ fs.readdirSync("./commands")
 		}
 
 		if (command.onLoad) {
-			command.onLoad();
+			command.onLoad(client);
 		}
 	});
 
