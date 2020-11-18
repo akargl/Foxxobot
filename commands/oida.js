@@ -3,7 +3,7 @@ const fs = require("fs");
 module.exports = {
 	name: "oida",
 	description: "Oida a user.",
-	cooldown: 10,
+	cooldown: 15 * 60,
 
 	execute(message, args) {
 		if (!args.length) {
@@ -26,7 +26,7 @@ module.exports = {
 		}
 		this.oidaCount[lookupKey].oidaCount++;
 
-		fs.writeFileSync("oidacount.json", JSON.stringify(this.oidaCount));
+		fs.writeFileSync("oidacount.json", JSON.stringify(this.oidaCount, undefined, 4));
 
 		return message.channel.send(`Oida ${username}!\nDu wurdest ${this.oidaCount[lookupKey].oidaCount} mal geoidat.`);
 	},
