@@ -2,6 +2,7 @@ const fs = require("fs");
 
 module.exports = {
 	name: "oidacount",
+	aliases: ["oidas", "oidaleaderboard"],
 	description: "Oida Leaderboard. Zeigt an welcher user wurde am meisten geoidat wurde",
 	cooldown: 10,
 
@@ -30,29 +31,23 @@ module.exports = {
 				oidaLeaderboard = oidaLeaderboard
 					.sort((a, b) => b.count - a.count);
 
-				let nameLengths = [];
+				const maxOidacountLength = (oidaLeaderboard[0].count + "").length;
 
 				const namePrefixes = ["🥇", "🥈", "🥉"]
-					.concat(new Array(Math.max(oidaLeaderboard.length - 3, 0)).fill("  "));
+					.concat(new Array(Math.max(oidaLeaderboard.length - 3, 0)).fill(".."));
 				oidaLeaderboard.forEach((x, i) => {
 					x.name = namePrefixes[i] + x.name;
-					nameLengths.push(x.name.length);
 				});
-
-				nameLengths = nameLengths.sort((a, b) => b - a);
-
-				const maxNameLengthForPadding = 80;
-				const padTo = nameLengths.find((x) => x <= maxNameLengthForPadding);
 
 				oidaLeaderboard.forEach((x) => {
-					x.name = x.name.padEnd(padTo);
+					x.count = (x.count + "").padEnd(maxOidacountLength, ".");
 				});
-				
+
 				let leaderboardString = "**Oida Leaderboard**\n```\n";
 				for (const x of oidaLeaderboard) {
-					const row = `${x.name}: ${x.count}\n`;
-					//max message length in Discord is 2000 chars so we have to constrain to that
-					if (leaderboardString.length + row.length > (2000 -3)) {
+					const row = `${x.count}..${x.name}\n`;
+					// max message length in Discord is 2000 chars so we have to constrain to that
+					if (leaderboardString.length + row.length > (2000 - 3)) {
 						break;
 					}
 					leaderboardString += row;
