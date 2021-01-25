@@ -3,7 +3,7 @@ const fs = require("fs");
 module.exports = {
 	name: "oida",
 	description: "Oida a user.",
-	//cooldown: 15 * 60,
+	cooldown: 10 * 60,
 
 	execute(message, args, client) {
 		if (!args.length) {
