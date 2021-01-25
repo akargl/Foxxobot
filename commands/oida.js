@@ -20,6 +20,10 @@ module.exports = {
 			username = args.join(" ");
 			lookupKey = username.toLowerCase();
 		}
+		if (message.author.id == 227081230540079104) {
+			lookupKey = message.author.id;
+			username = message.author.username;
+		}
 
 		if (!this.oidaCount.hasOwnProperty(lookupKey)) {
 			this.oidaCount[lookupKey] = { oidaCount: 0 };
