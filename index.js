@@ -4,6 +4,8 @@ const fs = require("fs");
 const prettyMilliseconds = require("pretty-ms");
 const client = new Client();
 
+client.settings = JSON.parse(fs.readFileSync("settings.json", "utf8"));
+
 client.commands = new Collection();
 client.commandAliases = new Collection();
 fs.readdirSync("./commands")
@@ -81,7 +83,7 @@ client.on("message", message => {
 	}
 
 	try {
-		command.execute(message, args);
+		command.execute(message, args, client);
 	} catch (error) {
 		console.error(error);
 		return message.reply("There was an error executing that command!");
@@ -95,14 +97,13 @@ client.on("presenceUpdate", (oldMember, newMember) => {
 	if (!oldMember) {
 		return;
 	}
-	const settings = JSON.parse(fs.readFileSync("settings.json", "utf8"));
 
 	const id = oldMember.id;
 
-	if (settings.monitoredBots.hasOwnProperty(id)) {
+	if (client.settings.monitoredBots.hasOwnProperty(id)) {
 		let botChannel = newMember.guild.defaultChannel;
-		if (settings.defaultChannels.hasOwnProperty(newMember.guild.id)) {
-			botChannel = client.channels.get(settings.defaultChannels[newMember.guild.id]);
+		if (client.settings.defaultChannels.hasOwnProperty(newMember.guild.id)) {
+			botChannel = client.channels.get(client.settings.defaultChannels[newMember.guild.id]);
 		}
 
 		if (!botChannel) {
@@ -127,8 +128,8 @@ client.on("presenceUpdate", (oldMember, newMember) => {
 			botUptimes.set(id, now);
 		} else if (oldMember.presence.status !== "offline" && newMember.presence.status === "offline") {
 			let msg = `OnO, ${newMember.displayName} is gone`;
-			if (settings.monitoredBots[id].pingOwner) {
-				msg += ` <@${settings.monitoredBots[id].ownerId}>.`;
+			if (client.settings.monitoredBots[id].pingOwner) {
+				msg += ` <@${client.settings.monitoredBots[id].ownerId}>.`;
 			}
 			if (duration) {
 				msg += ` Uptime was ${duration}.`;

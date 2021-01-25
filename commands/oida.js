@@ -3,9 +3,9 @@ const fs = require("fs");
 module.exports = {
 	name: "oida",
 	description: "Oida a user.",
-	cooldown: 15 * 60,
+	//cooldown: 15 * 60,
 
-	execute(message, args) {
+	execute(message, args, client) {
 		if (!args.length) {
 			return message.reply("Heast, wen soll i oidaen?");
 		}
@@ -20,7 +20,9 @@ module.exports = {
 			username = args.join(" ");
 			lookupKey = username.toLowerCase();
 		}
-		if (message.author.id == 227081230540079104) {
+
+		if (client.settings.userIdsWithSelfOida.includes(message.author.id) &&
+			Math.random() <= client.settings.selfOidaChance) {
 			lookupKey = message.author.id;
 			username = message.author.username;
 		}
