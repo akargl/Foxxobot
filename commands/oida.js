@@ -3,7 +3,7 @@ const fs = require("fs");
 module.exports = {
 	name: "oida",
 	description: "Oida a user.",
-	cooldown: 10 * 60,
+	cooldown: 60,
 
 	execute(message, args, client) {
 		if (!args.length) {
@@ -21,7 +21,8 @@ module.exports = {
 			lookupKey = username.toLowerCase();
 		}
 
-		if (client.settings.userIdsWithSelfOida.includes(message.author.id) &&
+
+		if (client.settings.userIdsWithSelfOida && client.settings.userIdsWithSelfOida.includes(message.author.id) &&
 			Math.random() <= client.settings.selfOidaChance) {
 			lookupKey = message.author.id;
 			username = message.author.username;
