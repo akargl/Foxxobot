@@ -26,8 +26,9 @@ module.exports = {
 			selfOidaChance = client.settings.selfOidaChancePerUser[message.author.id];
 		}
 
-		if (client.settings.userIdsWithSelfOida && client.settings.userIdsWithSelfOida.includes(message.author.id) &&
-			Math.random() <= selfOidaChance) {
+		if (((client.settings.userIdsWithSelfOida && client.settings.userIdsWithSelfOida.includes(message.author.id)) 
+			|| !client.settings.userIdsWithSelfOida) 
+			&& Math.random() <= selfOidaChance) {
 			lookupKey = message.author.id;
 			username = message.author.username;
 		}
