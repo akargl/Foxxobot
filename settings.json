@@ -22,5 +22,8 @@
         "219113680292413441",
         "267717213316841473"
     ],
-    "selfOidaChance": 0.5
+    "selfOidaChance": 0.5,
+    "selfOidaChancePerUser": {
+        "227081230540079104": 0.8
+    }
 }

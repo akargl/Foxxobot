@@ -21,9 +21,13 @@ module.exports = {
 			lookupKey = username.toLowerCase();
 		}
 
+		let selfOidaChance = client.settings.selfOidaChance;
+		if (client.settings.selfOidaChancePerUser && client.settings.selfOidaChancePerUser.hasOwnProperty(message.author.id)) {
+			selfOidaChance = client.settings.selfOidaChancePerUser[message.author.id];
+		}
 
 		if (client.settings.userIdsWithSelfOida && client.settings.userIdsWithSelfOida.includes(message.author.id) &&
-			Math.random() <= client.settings.selfOidaChance) {
+			Math.random() <= selfOidaChance) {
 			lookupKey = message.author.id;
 			username = message.author.username;
 		}
