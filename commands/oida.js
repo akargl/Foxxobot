@@ -7,7 +7,7 @@ module.exports = {
 
 	execute(message, args, client) {
 		if (!args.length) {
-			return message.reply("Heast, wen soll i oidaen?");
+			return message.reply("Heast, wen soll i oidan?");
 		}
 
 		let lookupKey;
