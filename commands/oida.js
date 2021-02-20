@@ -10,37 +10,55 @@ module.exports = {
 			return message.reply("Heast, wen soll i oidan?");
 		}
 
-		let lookupKey;
+		let targetusername;
 		let username;
+		let targetid;
+		let sourceid;
+		let oidacooldown;
+
 		if (message.mentions.users.size) {
 			const mentionedUser = message.mentions.users.first();
-			lookupKey = mentionedUser.id;
-			username = mentionedUser.username;
+			targetusername = mentionedUser.username;
+			targetid = mentionedUser.id;
 		} else {
-			username = args.join(" ");
-			lookupKey = username.toLowerCase();
+			targetusername = args.join(" ");
+			targetid = username.toLowerCase();
+		}
+    sourceid = message.author.id;
+
+		if (client.settings.oidaCooldown) {
+			oidacooldown = Date.now() + client.settings.oidaCooldown;
+		}	else {
+			oidacooldown = Date.now() + 1800;
 		}
 
-		let selfOidaChance = client.settings.selfOidaChance;
-		if (client.settings.selfOidaChancePerUser && client.settings.selfOidaChancePerUser.hasOwnProperty(message.author.id)) {
-			selfOidaChance = client.settings.selfOidaChancePerUser[message.author.id];
+		if (this.oidaCount.hasOwnProperty(sourceid)) {
+			if (this.oidaCount[sourceid].lasttarget == targetid) {
+				return message.reply("Bist oag??!! Die selbe Person 2x oidan is verboten!");
+			}
+		} else {
+			this.oidaCount[sourceid] = { oidaCount: 0, lasttarget: "", lastsource: "", lasttime: 0 };
 		}
 
-		if (((client.settings.userIdsWithSelfOida && client.settings.userIdsWithSelfOida.includes(message.author.id)) 
-			|| !client.settings.userIdsWithSelfOida)
-			&& Math.random() <= selfOidaChance) {
-			lookupKey = message.author.id;
-			username = message.author.username;
+		if(this.oidaCount.hasOwnProperty(targetid)) {
+			if ((this.oidaCount[targetid].lastsource == sourceid) && (this.oidaCount[targetid].lasttime > oidacooldown)) {
+				return message.reply("Zruckoidan spüts ned, sry");
+			}
+			if (this.oidaCount[targetid].lasttime > oidacooldown) {
+				return message.reply("NA!!! Den hauma grod erst geoidat, suach da wen andern zum sekkiern!");
+			}
+		} else {
+			this.oidaCount[targetid] = { oidaCount: 0, lasttarget: "", lastsource: "", lasttime: 0 };
 		}
 
-		if (!this.oidaCount.hasOwnProperty(lookupKey)) {
-			this.oidaCount[lookupKey] = { oidaCount: 0 };
-		}
-		this.oidaCount[lookupKey].oidaCount++;
+		this.oidaCount[targetid].oidaCount++;
+		this.oidaCount[targetid].lastsource = sourceid;
+		this.oidaCount[targetid].lasttime = Date.now();
+		this.oidaCount[sourceid].lasttarget = targetid;
 
 		fs.writeFileSync("oidacount.json", JSON.stringify(this.oidaCount, undefined, 4));
 
-		return message.channel.send(`Oida ${username}!\nDu wurdest ${this.oidaCount[lookupKey].oidaCount} mal geoidat.`);
+		return message.channel.send(`Oida ${targetusername}!\nDu wurdest ${this.oidaCount[targetid].oidaCount} mal geoidat.`);
 	},
 	oidaCount: {},
 	onLoad() {
