@@ -11,7 +11,6 @@ module.exports = {
 		}
 
 		let targetusername;
-		let username;
 		let targetid;
 		let sourceid;
 		let oidacooldown;
@@ -22,7 +21,7 @@ module.exports = {
 			targetid = mentionedUser.id;
 		} else {
 			targetusername = args.join(" ");
-			targetid = username.toLowerCase();
+			targetid = targetusername.toLowerCase();
 		}
     sourceid = message.author.id;
 
