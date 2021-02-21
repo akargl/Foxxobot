@@ -12,8 +12,6 @@ module.exports = {
 
 		let targetusername;
 		let targetid;
-		let sourceid;
-		let oidacooldown;
 
 		if (message.mentions.users.size) {
 			const mentionedUser = message.mentions.users.first();
@@ -23,16 +21,15 @@ module.exports = {
 			targetusername = args.join(" ");
 			targetid = targetusername.toLowerCase();
 		}
-    sourceid = message.author.id;
+		const sourceid = message.author.id;
 
+		let oidacooldown = 1800;
 		if (client.settings.oidaCooldown) {
-			oidacooldown = Date.now() + client.settings.oidaCooldown;
-		}	else {
-			oidacooldown = Date.now() + 1800;
+			oidacooldown = client.settings.oidaCooldown;
 		}
 
 		if (this.oidaCount.hasOwnProperty(sourceid)) {
-			if (this.oidaCount[sourceid].lasttarget == targetid) {
+			if (this.oidaCount[sourceid].lasttarget === targetid) {
 				return message.reply("Bist oag??!! Die selbe Person 2x oidan is verboten!");
 			}
 		} else {
@@ -40,10 +37,11 @@ module.exports = {
 		}
 
 		if(this.oidaCount.hasOwnProperty(targetid)) {
-			if ((this.oidaCount[targetid].lastsource == sourceid) && (this.oidaCount[targetid].lasttime > oidacooldown)) {
+			if ((this.oidaCount[targetid].lasttarget == sourceid) 
+				&& (this.oidaCount[targetid].lasttime > (Date.now() - oidacooldown))) {
 				return message.reply("Zruckoidan spüts ned, sry");
 			}
-			if (this.oidaCount[targetid].lasttime > oidacooldown) {
+			if (this.oidaCount[targetid].lasttime > (Date.now() - oidacooldown)) {
 				return message.reply("NA!!! Den hauma grod erst geoidat, suach da wen andern zum sekkiern!");
 			}
 		} else {
