@@ -23,7 +23,7 @@ module.exports = {
 		}
 		const sourceid = message.author.id;
 
-		let oidacooldown = 1800;
+		let oidacooldown = 1800 * 1000;
 		if (client.settings.oidaCooldown) {
 			oidacooldown = client.settings.oidaCooldown;
 		}
@@ -36,9 +36,9 @@ module.exports = {
 			this.oidaCount[sourceid] = { oidaCount: 0, lasttarget: "", lastsource: "", lasttime: 0 };
 		}
 
-		if(this.oidaCount.hasOwnProperty(targetid)) {
-			if ((this.oidaCount[targetid].lasttarget == sourceid) 
-				&& (this.oidaCount[targetid].lasttime > (Date.now() - oidacooldown))) {
+		if (this.oidaCount.hasOwnProperty(targetid)) {
+			if ((this.oidaCount[targetid].lasttarget === sourceid) 
+				&& (this.oidaCount[sourceid].lasttime > (Date.now() - oidacooldown))) {
 				return message.reply("Zruckoidan spüts ned, sry");
 			}
 			if (this.oidaCount[targetid].lasttime > (Date.now() - oidacooldown)) {
