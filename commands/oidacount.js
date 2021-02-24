@@ -50,7 +50,9 @@ module.exports = {
 					if (leaderboardString.length + row.length > (2000 - 3)) {
 						break;
 					}
-					leaderboardString += row;
+					if (x.count != 0) {
+						leaderboardString += row;
+					}
 				}
 				leaderboardString += "```";
 
