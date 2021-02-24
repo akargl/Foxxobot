@@ -33,7 +33,7 @@ module.exports = {
 				return message.reply("Bist oag??!! Die selbe Person 2x oidan is verboten!");
 			}
 		} else {
-			this.oidaCount[sourceid] = { oidaCount: 0, lasttarget: "", lastsource: "", lasttime: 0 };
+			this.oidaCount[sourceid] = { oidaCount: 0, oidasgiven: 0, lasttarget: "", lastsource: "", lasttime: 0 };
 		}
 
 		if (this.oidaCount.hasOwnProperty(targetid)) {
@@ -45,13 +45,14 @@ module.exports = {
 				return message.reply("NA!!! Den hauma grod erst geoidat, suach da wen andern zum sekkiern!");
 			}
 		} else {
-			this.oidaCount[targetid] = { oidaCount: 0, lasttarget: "", lastsource: "", lasttime: 0 };
+			this.oidaCount[targetid] = { oidaCount: 0, oidasgiven: 0, lasttarget: "", lastsource: "", lasttime: 0 };
 		}
 
 		this.oidaCount[targetid].oidaCount++;
 		this.oidaCount[targetid].lastsource = sourceid;
 		this.oidaCount[targetid].lasttime = Date.now();
 		this.oidaCount[sourceid].lasttarget = targetid;
+		this.oidaCount[sourceid].oidasgiven++;
 
 		fs.writeFileSync("oidacount.json", JSON.stringify(this.oidaCount, undefined, 4));
 
