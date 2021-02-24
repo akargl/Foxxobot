@@ -4,6 +4,7 @@ module.exports = {
 	name: "oida",
 	description: "Oida a user.",
 	cooldown: 200,
+	guildOnly: true,
 
 	execute(message, args, client) {
 		if (!args.length) {
