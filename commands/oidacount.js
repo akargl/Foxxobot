@@ -24,6 +24,7 @@ module.exports = {
 					if (members.has(k)) {
 						name = members.get(k).displayName;
 					}
+					name = constrainStringLength(name, 25);
 					oidaLeaderboard.push({ name: name, count: oidacount[k].oidaCount });
 				});
 
@@ -60,3 +61,7 @@ module.exports = {
 			});
 	},
 };
+
+function constrainStringLength(str, length) {
+	return str.length > length ? str.substring(0, length - 3) + "..." : this;
+}
