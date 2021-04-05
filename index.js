@@ -33,6 +33,9 @@ client.once("ready", () => {
 
 client.login(config.DISCORD_TOKEN);
 
+/**
+ * Handle bot commands
+ */
 client.addListener("message", message => {
 	if (!message.content.startsWith(config.PREFIX) || message.author.bot) {
 		return;
@@ -90,16 +93,19 @@ client.addListener("message", message => {
 	}
 });
 
+/**
+ * Repost clean aliexpress links with tracking and subdomains removed
+ */
 client.addListener("message", message => {
 	const regex = / *(?<protocol>https?:\/\/)?(?<subdomains>\S*?\.?)(?<aliLink>aliexpress\.com\/item\/\d*\.html)(?<queryParameter>\?\S*)?\s*/gm;
-	let matches = Array.from(message.content.matchAll(regex));
+	const matches = Array.from(message.content.matchAll(regex));
 
-	let cleanedUrls = matches
+	const cleanedUrls = matches
 		.filter(m => (!!(m.groups.subdomains) && m.groups.subdomains !== "" && m.groups.subdomains !== "www.") || (!!(m.groups.queryParameter) && m.groups.queryParameter !== ""))
 		.map(m => `https://${m.groups.aliLink}`);
 
 	if (cleanedUrls.length > 0) {
-		let linkFields = cleanedUrls.map((m, i) => { return { "name": `Url ${i}`, "value": m }; });
+		const linkFields = cleanedUrls.map((m, i) => { return { "name": `Url ${i}`, "value": m }; });
 
 		const cleanLinksEmbed = new MessageEmbed()
 			.setTitle("Found unclean Aliexpress links")
@@ -111,8 +117,10 @@ client.addListener("message", message => {
 });
 
 
+/**
+ * Track uptimes of other bots on server
+ */
 const botUptimes = new Collection();
-
 client.addListener("presenceUpdate", (oldMember, newMember) => {
 	if (!oldMember) {
 		return;
