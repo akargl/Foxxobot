@@ -1,5 +1,5 @@
 const config = require("./config");
-const { Client, Collection } = require("discord.js");
+const { Client, Collection, DiscordAPIError, MessageEmbed } = require("discord.js");
 const fs = require("fs");
 const prettyMilliseconds = require("pretty-ms");
 const client = new Client();
@@ -33,7 +33,7 @@ client.once("ready", () => {
 
 client.login(config.DISCORD_TOKEN);
 
-client.on("message", message => {
+client.addListener("message", message => {
 	if (!message.content.startsWith(config.PREFIX) || message.author.bot) {
 		return;
 	}
@@ -90,10 +90,30 @@ client.on("message", message => {
 	}
 });
 
+client.addListener("message", message => {
+	const regex = / *(?<protocol>https?:\/\/)?(?<subdomains>\S*?\.?)(?<aliLink>aliexpress\.com\/item\/\d*\.html)(?<queryParameter>\?\S*)?\s*/gm;
+	let matches = Array.from(message.content.matchAll(regex));
+
+	let cleanedUrls = matches
+		.filter(m => (!!(m.groups.subdomains) && m.groups.subdomains !== "" && m.groups.subdomains !== "www.") || (!!(m.groups.queryParameter) && m.groups.queryParameter !== ""))
+		.map(m => `https://${m.groups.aliLink}`);
+
+	if (cleanedUrls.length > 0) {
+		let linkFields = cleanedUrls.map((m, i) => { return { "name": `Url ${i}`, "value": m }; });
+
+		const cleanLinksEmbed = new MessageEmbed()
+			.setTitle("Found unclean Aliexpress links")
+			.addFields(linkFields)
+			.setFooter("Removed the country specific & tracking part from the URL");
+
+		return message.reply(cleanLinksEmbed);
+	}
+});
+
 
 const botUptimes = new Collection();
 
-client.on("presenceUpdate", (oldMember, newMember) => {
+client.addListener("presenceUpdate", (oldMember, newMember) => {
 	if (!oldMember) {
 		return;
 	}
