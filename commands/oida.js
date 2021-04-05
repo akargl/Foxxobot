@@ -11,6 +11,8 @@ module.exports = {
 			return message.reply("Heast, wen soll i oidan?");
 		}
 
+		return message.channel.send("Na");
+
 		let targetusername;
 		let targetid;
 
